@@ -1,0 +1,41 @@
+{
+	"name": "@games/backend",
+	"version": "0.0.0",
+	"description": "Games API",
+	"engines": {
+		"node": ">=22.7"
+	},
+	"workspaces": [
+		"packages/common",
+		"packages/games",
+		"packages/sequence-words",
+		"packages/web"
+	],
+	"scripts": {
+		"prepare": "husky",
+		"prettify": "npx prettier 'packages/**/*.ts' --cache --write",
+		"lint": "npm run lint --workspaces --if-present",
+		"clean": "npm run clean --workspaces --if-present",
+		"build": "npm run build --workspaces --if-present",
+		"web:dev": "npm run -w @games/web dev",
+		"games:dev": "npm run -w @games/games serve",
+		"games:seed": "npm run -w @games/games seed",
+		"games:docs": "npm run -w @games/games generate:api-spec",
+		"sequence-words:dev": "npm run -w @games/sequence-words serve",
+		"dev": "npm-run-all --parallel games:dev sequence-words:dev",
+		"deploy:live": "npm run deploy:live --workspaces --if-present"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "UNLICENSED",
+	"type": "module",
+	"devDependencies": {
+		"@types/node": "^24.10.1",
+		"husky": "^9.1.7",
+		"npm-run-all": "^4.1.5",
+		"typescript": "^5.9.3"
+	},
+	"dependencies": {
+		"dotenv-cli": "^11.0.0"
+	}
+}

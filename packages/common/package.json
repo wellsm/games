@@ -1,0 +1,27 @@
+{
+  "name": "@games/common",
+  "description": "Games API Common Resources",
+  "version": "0.0.0",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "ez4.project.js",
+  "private": true,
+  "exports": {
+    ".": "./src/export.ts"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "serve": "dotenv -e ../../local.env -- ez4 serve -e ../../deploy.env",
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "uuidv7": "^1.1.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.8",
+    "husky": "^9.1.7",
+    "ultracite": "^6.3.10"
+  }
+}

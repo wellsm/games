@@ -1,0 +1,39 @@
+{
+  "version": "v1",
+  "packages": {
+    "@ez4/docs-gateway-ui": {
+      "signature": "45cef3a925344e09b130fba7791d2b53",
+      "file": true
+    },
+    "@ez4/local-gateway": {
+      "signature": "556ff210b0d87a38573dafbc7de2c140",
+      "pure": true
+    },
+    "@ez4/docs-gateway": {
+      "signature": "b2dc6bc48c3f69928faf65aac774c0ed",
+      "file": true,
+      "replaced": "^0.35.0"
+    },
+    "@ez4/project": {
+      "signature": "097bd115d65ca65bc392aa2da3a0bdc5",
+      "file": true
+    },
+    "@ez4/pg": {
+      "signature": "f89bf3ada0fcd160b70692af3fd71695",
+      "pure": true
+    },
+    "@ez4/pgclient": {
+      "signature": "a465dfbf8bbc9ad9f287bac1c1c9b28d",
+      "file": true
+    },
+    "@ez4/gateway": {
+      "signature": "285c883a241d8c53de72b58a81d4a585",
+      "pure": true,
+      "replaced": "^0.35.1"
+    },
+    "@ez4/local-common": {
+      "signature": "01c8206bbc77adda5ce9832a73133fc5",
+      "pure": true
+    }
+  }
+}

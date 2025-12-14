@@ -1,0 +1,40 @@
+{
+	"name": "@games/games",
+	"description": "Games API",
+	"version": "0.0.0",
+	"license": "UNLICENSED",
+	"type": "module",
+	"main": "ez4.project.js",
+	"private": true,
+	"exports": {
+		".": "./src/export.ts"
+	},
+	"workspaces": [
+		"packages/*"
+	],
+	"scripts": {
+		"seed": "dotenv -e ../../local.env -- ez4 run --local -e ../../deploy.env -- ./src/database/seed.ts",
+		"build": "tsc -p tsconfig.json",
+		"generate:api-spec": "tsc -p tsconfig.json && ez4 generate -- gateway:oas ./docs",
+		"serve": "dotenv -e ../../local.env -- ez4 serve --local -e ../../deploy.env"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.8",
+		"@ez4/common": "^0.35.0",
+		"@ez4/database": "^0.35.0",
+		"@ez4/docs-gateway": "file:.yalc/@ez4/docs-gateway",
+		"@ez4/gateway": "file:.yalc/@ez4/gateway",
+		"@ez4/local-database": "^0.35.0",
+		"@games/common": "^0.0.0",
+		"husky": "^9.1.7",
+		"ultracite": "^6.3.10"
+	},
+	"dependencies": {
+		"@ez4/docs-gateway-ui": "file:.yalc/@ez4/docs-gateway-ui",
+		"@ez4/local-common": "file:.yalc/@ez4/local-common",
+		"@ez4/local-gateway": "file:.yalc/@ez4/local-gateway",
+		"@ez4/pg": "file:.yalc/@ez4/pg",
+		"@ez4/pgclient": "file:.yalc/@ez4/pgclient",
+		"@ez4/project": "file:.yalc/@ez4/project"
+	}
+}
