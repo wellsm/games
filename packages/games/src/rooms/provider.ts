@@ -1,10 +1,10 @@
 import type { Environment } from "@ez4/common";
 import type { Http } from "@ez4/gateway";
-import type { Db } from "@/database/config";
+import type { Db } from "@/database/postgres";
 
 export declare class RoomProvider implements Http.Provider {
-	services: {
-		variables: Environment.ServiceVariables;
-		db: Environment.Service<Db>;
-	};
+  services: {
+    variables: Environment.ServiceVariables;
+    db: Environment.Service<Db>;
+  };
 }

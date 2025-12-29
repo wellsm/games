@@ -14,14 +14,10 @@
   ],
   "scripts": {
     "serve": "dotenv -e ../../local.env -- ez4 serve -e ../../deploy.env",
+    "clean": "rm -f *.tsbuildinfo && rm -rf dist/*",
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "uuidv7": "^1.1.0"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.3.8",
-    "husky": "^9.1.7",
-    "ultracite": "^6.3.10"
   }
 }

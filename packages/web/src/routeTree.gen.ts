@@ -9,48 +9,184 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignUpRouteImport } from './routes/sign-up'
+import { Route as GamesRouteImport } from './routes/games'
+import { Route as GameRouteImport } from './routes/$game'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
+import { Route as GameIndexRouteImport } from './routes/$game/index'
+import { Route as GamePlayersRouteImport } from './routes/$game/players'
+import { Route as GameRoomRouteImport } from './routes/$game/$room'
+import { Route as GameRoom1WaitingRouteImport } from './routes/$game/$room-1/waiting'
+import { Route as GameRoom1StartRouteImport } from './routes/$game/$room-1/start'
+import { Route as GameRoom1PrepareRouteImport } from './routes/$game/$room-1/prepare'
+import { Route as GameRoom1PlayRouteImport } from './routes/$game/$room-1/play'
 
+const SignUpRoute = SignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GamesRoute = GamesRouteImport.update({
+  id: '/games',
+  path: '/games',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameRoute = GameRouteImport.update({
+  id: '/$game',
+  path: '/$game',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
-  id: '/demo/tanstack-query',
-  path: '/demo/tanstack-query',
-  getParentRoute: () => rootRouteImport,
+const GameIndexRoute = GameIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => GameRoute,
+} as any)
+const GamePlayersRoute = GamePlayersRouteImport.update({
+  id: '/players',
+  path: '/players',
+  getParentRoute: () => GameRoute,
+} as any)
+const GameRoomRoute = GameRoomRouteImport.update({
+  id: '/$room',
+  path: '/$room',
+  getParentRoute: () => GameRoute,
+} as any)
+const GameRoom1WaitingRoute = GameRoom1WaitingRouteImport.update({
+  id: '/$room-1/waiting',
+  path: '/$room-1/waiting',
+  getParentRoute: () => GameRoute,
+} as any)
+const GameRoom1StartRoute = GameRoom1StartRouteImport.update({
+  id: '/$room-1/start',
+  path: '/$room-1/start',
+  getParentRoute: () => GameRoute,
+} as any)
+const GameRoom1PrepareRoute = GameRoom1PrepareRouteImport.update({
+  id: '/$room-1/prepare',
+  path: '/$room-1/prepare',
+  getParentRoute: () => GameRoute,
+} as any)
+const GameRoom1PlayRoute = GameRoom1PlayRouteImport.update({
+  id: '/$room-1/play',
+  path: '/$room-1/play',
+  getParentRoute: () => GameRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/$game': typeof GameRouteWithChildren
+  '/games': typeof GamesRoute
+  '/sign-up': typeof SignUpRoute
+  '/$game/$room': typeof GameRoomRoute
+  '/$game/players': typeof GamePlayersRoute
+  '/$game/': typeof GameIndexRoute
+  '/$game/$room-1/play': typeof GameRoom1PlayRoute
+  '/$game/$room-1/prepare': typeof GameRoom1PrepareRoute
+  '/$game/$room-1/start': typeof GameRoom1StartRoute
+  '/$game/$room-1/waiting': typeof GameRoom1WaitingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/games': typeof GamesRoute
+  '/sign-up': typeof SignUpRoute
+  '/$game/$room': typeof GameRoomRoute
+  '/$game/players': typeof GamePlayersRoute
+  '/$game': typeof GameIndexRoute
+  '/$game/$room-1/play': typeof GameRoom1PlayRoute
+  '/$game/$room-1/prepare': typeof GameRoom1PrepareRoute
+  '/$game/$room-1/start': typeof GameRoom1StartRoute
+  '/$game/$room-1/waiting': typeof GameRoom1WaitingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/$game': typeof GameRouteWithChildren
+  '/games': typeof GamesRoute
+  '/sign-up': typeof SignUpRoute
+  '/$game/$room': typeof GameRoomRoute
+  '/$game/players': typeof GamePlayersRoute
+  '/$game/': typeof GameIndexRoute
+  '/$game/$room-1/play': typeof GameRoom1PlayRoute
+  '/$game/$room-1/prepare': typeof GameRoom1PrepareRoute
+  '/$game/$room-1/start': typeof GameRoom1StartRoute
+  '/$game/$room-1/waiting': typeof GameRoom1WaitingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo/tanstack-query'
+  fullPaths:
+    | '/'
+    | '/$game'
+    | '/games'
+    | '/sign-up'
+    | '/$game/$room'
+    | '/$game/players'
+    | '/$game/'
+    | '/$game/$room-1/play'
+    | '/$game/$room-1/prepare'
+    | '/$game/$room-1/start'
+    | '/$game/$room-1/waiting'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo/tanstack-query'
-  id: '__root__' | '/' | '/demo/tanstack-query'
+  to:
+    | '/'
+    | '/games'
+    | '/sign-up'
+    | '/$game/$room'
+    | '/$game/players'
+    | '/$game'
+    | '/$game/$room-1/play'
+    | '/$game/$room-1/prepare'
+    | '/$game/$room-1/start'
+    | '/$game/$room-1/waiting'
+  id:
+    | '__root__'
+    | '/'
+    | '/$game'
+    | '/games'
+    | '/sign-up'
+    | '/$game/$room'
+    | '/$game/players'
+    | '/$game/'
+    | '/$game/$room-1/play'
+    | '/$game/$room-1/prepare'
+    | '/$game/$room-1/start'
+    | '/$game/$room-1/waiting'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  GameRoute: typeof GameRouteWithChildren
+  GamesRoute: typeof GamesRoute
+  SignUpRoute: typeof SignUpRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/games': {
+      id: '/games'
+      path: '/games'
+      fullPath: '/games'
+      preLoaderRoute: typeof GamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$game': {
+      id: '/$game'
+      path: '/$game'
+      fullPath: '/$game'
+      preLoaderRoute: typeof GameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -58,19 +194,85 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/tanstack-query': {
-      id: '/demo/tanstack-query'
-      path: '/demo/tanstack-query'
-      fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof DemoTanstackQueryRouteImport
-      parentRoute: typeof rootRouteImport
+    '/$game/': {
+      id: '/$game/'
+      path: '/'
+      fullPath: '/$game/'
+      preLoaderRoute: typeof GameIndexRouteImport
+      parentRoute: typeof GameRoute
+    }
+    '/$game/players': {
+      id: '/$game/players'
+      path: '/players'
+      fullPath: '/$game/players'
+      preLoaderRoute: typeof GamePlayersRouteImport
+      parentRoute: typeof GameRoute
+    }
+    '/$game/$room': {
+      id: '/$game/$room'
+      path: '/$room'
+      fullPath: '/$game/$room'
+      preLoaderRoute: typeof GameRoomRouteImport
+      parentRoute: typeof GameRoute
+    }
+    '/$game/$room-1/waiting': {
+      id: '/$game/$room-1/waiting'
+      path: '/$room-1/waiting'
+      fullPath: '/$game/$room-1/waiting'
+      preLoaderRoute: typeof GameRoom1WaitingRouteImport
+      parentRoute: typeof GameRoute
+    }
+    '/$game/$room-1/start': {
+      id: '/$game/$room-1/start'
+      path: '/$room-1/start'
+      fullPath: '/$game/$room-1/start'
+      preLoaderRoute: typeof GameRoom1StartRouteImport
+      parentRoute: typeof GameRoute
+    }
+    '/$game/$room-1/prepare': {
+      id: '/$game/$room-1/prepare'
+      path: '/$room-1/prepare'
+      fullPath: '/$game/$room-1/prepare'
+      preLoaderRoute: typeof GameRoom1PrepareRouteImport
+      parentRoute: typeof GameRoute
+    }
+    '/$game/$room-1/play': {
+      id: '/$game/$room-1/play'
+      path: '/$room-1/play'
+      fullPath: '/$game/$room-1/play'
+      preLoaderRoute: typeof GameRoom1PlayRouteImport
+      parentRoute: typeof GameRoute
     }
   }
 }
 
+interface GameRouteChildren {
+  GameRoomRoute: typeof GameRoomRoute
+  GamePlayersRoute: typeof GamePlayersRoute
+  GameIndexRoute: typeof GameIndexRoute
+  GameRoom1PlayRoute: typeof GameRoom1PlayRoute
+  GameRoom1PrepareRoute: typeof GameRoom1PrepareRoute
+  GameRoom1StartRoute: typeof GameRoom1StartRoute
+  GameRoom1WaitingRoute: typeof GameRoom1WaitingRoute
+}
+
+const GameRouteChildren: GameRouteChildren = {
+  GameRoomRoute: GameRoomRoute,
+  GamePlayersRoute: GamePlayersRoute,
+  GameIndexRoute: GameIndexRoute,
+  GameRoom1PlayRoute: GameRoom1PlayRoute,
+  GameRoom1PrepareRoute: GameRoom1PrepareRoute,
+  GameRoom1StartRoute: GameRoom1StartRoute,
+  GameRoom1WaitingRoute: GameRoom1WaitingRoute,
+}
+
+const GameRouteWithChildren = GameRoute._addFileChildren(GameRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  GameRoute: GameRouteWithChildren,
+  GamesRoute: GamesRoute,
+  SignUpRoute: SignUpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

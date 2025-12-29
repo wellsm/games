@@ -1,36 +1,50 @@
-const { APPS_DEBUG, APPS_STAGE = 'dev' } = process.env;
+const {
+  APPS_DEBUG,
+  APPS_STAGE = "dev",
+  CLERK_HEADER_SECRET,
+  CLERK_SECRET_KEY,
+} = process.env;
 
 /**
  * @type {import('@ez4/project').ProjectOptions}
  */
 export default {
-    prefix: APPS_STAGE,
-    projectName: 'games',
-    debugMode: true,
-    sourceFiles: [
-        './src/api.ts'
-    ],
-    stateFile: {
-        path: `${APPS_STAGE}-deploy`,
-        remote: true
+  prefix: APPS_STAGE,
+  projectName: "games",
+  debugMode: true,
+  sourceFiles: [
+    "./src/api.ts",
+    "./src/database/postgres.ts",
+    "./src/wss.ts",
+    "./src/database/dynamo.ts",
+  ],
+  stateFile: {
+    path: `${APPS_STAGE}-deploy`,
+    remote: true,
+  },
+  variables: {
+    APPS_STAGE,
+    APPS_DEBUG,
+    CLERK_HEADER_SECRET,
+    CLERK_SECRET_KEY,
+  },
+  tags: {
+    Project: "Sequence Words",
+    Owner: "Well",
+  },
+  serveOptions: {
+    localPort: 3734,
+  },
+  localOptions: {
+    db: {
+      user: "postgres",
+      password: "postgres",
+      port: 54_321,
     },
-    variables: {
-        APPS_STAGE,
-        APPS_DEBUG
+    dynamo: {
+      host: "127.0.0.1",
+      port: 54_323,
     },
-    tags: {
-        Project: 'Sequence Words',
-        Owner: 'Well'
-    },
-    serveOptions: {
-        localPort: 3734,
-    },
-    localOptions: {
-        db: {
-            user: 'postgres',
-            password: 'postgres',
-            port: 54321
-        }
-    },
-    localMode: APPS_STAGE === 'dev'
+  },
+  localMode: APPS_STAGE === "dev",
 };

@@ -1,50 +1,63 @@
-import { StrictMode } from 'react'
-import ReactDOM from 'react-dom/client'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
-
-import * as TanStackQueryProvider from './integrations/tanstack-query/root-provider.tsx'
-
+import "./index.css";
+import { ClerkProvider, useAuth } from "@clerk/clerk-react";
+import { ptBR } from "@clerk/localizations";
+import { dark } from "@clerk/themes";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { StrictMode } from "react";
+import ReactDOM from "react-dom/client";
+import { env } from "@/config/env";
+import { ThemeProvider } from "./components/providers/theme";
 // Import the generated route tree
-import { routeTree } from './routeTree.gen'
+import { routeTree } from "./routeTree.gen";
 
-import './styles.css'
-import reportWebVitals from './reportWebVitals.ts'
+export const queryClient = new QueryClient();
 
-// Create a new router instance
-
-const TanStackQueryProviderContext = TanStackQueryProvider.getContext()
 const router = createRouter({
   routeTree,
   context: {
-    ...TanStackQueryProviderContext,
+    auth: undefined,
+    queryClient,
   },
-  defaultPreload: 'intent',
-  scrollRestoration: true,
-  defaultStructuralSharing: true,
+  defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
-})
+  scrollRestoration: true,
+});
 
 // Register the router instance for type safety
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface Register {
-    router: typeof router
+    router: typeof router;
   }
 }
 
-// Render the app
-const rootElement = document.getElementById('app')
-if (rootElement && !rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement)
-  root.render(
-    <StrictMode>
-      <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
-        <RouterProvider router={router} />
-      </TanStackQueryProvider.Provider>
-    </StrictMode>,
-  )
+export function App() {
+  const auth = useAuth();
+
+  return <RouterProvider context={{ auth }} router={router} />;
 }
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals()
+// biome-ignore lint/style/noNonNullAssertion: Annoying
+const rootElement = document.getElementById("root")!;
+
+if (!rootElement.innerHTML) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <StrictMode>
+      <ThemeProvider defaultTheme="dark" storageKey="games-theme">
+        <ClerkProvider
+          afterSignOutUrl="/"
+          appearance={{
+            theme: dark,
+          }}
+          localization={ptBR}
+          publishableKey={env.VITE_CLERK_PUBLISHABLE_KEY}
+        >
+          <QueryClientProvider client={queryClient}>
+            <App />
+          </QueryClientProvider>
+        </ClerkProvider>
+      </ThemeProvider>
+    </StrictMode>
+  );
+}

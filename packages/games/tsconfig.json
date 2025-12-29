@@ -4,14 +4,9 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "strictNullChecks": true
   },
-  "include": [
-    "./src",
-    "utils"
-  ]
+  "include": ["./src", "utils"]
 }

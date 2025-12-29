@@ -27,3 +27,25 @@ services:
       - "54322:3000"
     depends_on:
       - postgres
+
+  dynamodb:
+    image: amazon/dynamodb-local
+    container_name: games-dynamo
+    command: -jar DynamoDBLocal.jar -sharedDb
+    restart: unless-stopped
+    ports:
+      - 54323:8000
+
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin:latest
+    container_name: games-dynamo-admin
+    restart: unless-stopped
+    environment:
+      DYNAMO_ENDPOINT: "http://dynamodb:8000"
+      AWS_REGION: "local"
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+    depends_on:
+      - dynamodb
+    ports:
+      - 54324:8001

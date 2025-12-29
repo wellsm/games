@@ -1,4 +1,30 @@
 {
-	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-	"extends": ["ultracite/core"]
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["ultracite/core"],
+  "linter": {
+    "rules": {
+      "correctness": {
+        "useExhaustiveDependencies": "info"
+      },
+      "performance": {
+        "noBarrelFile": "off"
+      },
+      "suspicious": {
+        "noConstEnum": "off",
+        "noShadowRestrictedNames": "info",
+        "noArrayIndexKey": "info"
+      },
+      "style": {
+        "useConsistentTypeDefinitions": "off",
+        "noNestedTernary": "info"
+      },
+      "nursery": {
+        "useConsistentArrowReturn": "off",
+        "noShadow": "info"
+      },
+      "a11y": {
+        "noLabelWithoutControl": "off"
+      }
+    }
+  }
 }

@@ -1,107 +1,137 @@
+import type { String } from "@ez4/schema";
 import {
-	type AnyGameRules,
-	createRandomAlphanumeric,
-	getCurrentIsoDateTime,
+  type AnyGameRules,
+  createRandomAlphanumeric,
+  GameStatus,
+  getCurrentIsoDateTime,
+  type WhichGame,
 } from "@games/common";
-import type { DbClient } from "@/database/config";
-import { GameStatus } from "@/games/types";
+import type { DbClient } from "@/database/postgres";
 
-export namespace RoomRepository {
-	export async function listRoomsByGame(client: DbClient, gameSlug: string) {
-		const { records: rooms } = await client.rooms.findMany({
-			select: {
-				code: true,
-				status: true,
-				created_at: true,
-				game: {
-					name: true,
-					description: true,
-				},
-			},
-			where: {
-				game_slug: gameSlug,
-			},
-		});
+type ListRoomsByGameParams = {
+  gameSlug: WhichGame;
+  playerId: String.UUID;
+};
 
-		return rooms;
-	}
+export async function listRoomsByGame(
+  client: DbClient,
+  params: ListRoomsByGameParams
+) {
+  const { records: rooms } = await client.rooms.findMany({
+    select: {
+      code: true,
+      status: true,
+      created_at: true,
+      game: true,
+    },
+    where: {
+      game: params.gameSlug,
+      players: {
+        id: { isIn: [params.playerId] },
+      },
+    },
+  });
 
-	type CreateRoomParams = {
-		gameSlug: string;
-		rules: AnyGameRules;
-	};
+  return rooms;
+}
 
-	type RoomResult = {
-		code: string;
-	};
+type CreateRoomParams = {
+  gameSlug: WhichGame;
+  rules: AnyGameRules;
+};
 
-	export async function createSession(
-		client: DbClient,
-		params: CreateRoomParams,
-	): Promise<RoomResult> {
-		const code = createRandomAlphanumeric();
+type RoomResult = {
+  code: string;
+};
 
-		await client.rooms.insertOne({
-			data: {
-				code,
-				game: {
-					slug: params.gameSlug,
-				},
-				turn: 0,
-				rules: params.rules,
-				status: GameStatus.WaitingForPlayers,
-				created_at: getCurrentIsoDateTime(),
-				updated_at: getCurrentIsoDateTime(),
-			},
-		});
+export async function createSession(
+  client: DbClient,
+  params: CreateRoomParams
+): Promise<RoomResult> {
+  const code = createRandomAlphanumeric();
 
-		return {
-			code,
-		};
-	}
+  await client.rooms.insertOne({
+    data: {
+      code,
+      game: params.gameSlug,
+      turn: 0,
+      rules: params.rules,
+      status: GameStatus.WaitingForPlayers,
+      created_at: getCurrentIsoDateTime(),
+      updated_at: getCurrentIsoDateTime(),
+    },
+  });
 
-	type ShowRoomParams = {
-		gameSlug: string;
-		roomCode: string;
-	};
+  return {
+    code,
+  };
+}
 
-	export async function showRoom(client: DbClient, params: ShowRoomParams) {
-		const room = await client.rooms.findOne({
-			select: {
-				code: true,
-				status: true,
-				created_at: true,
-				rules: true,
-				players: {
-					id: true,
-					name: true,
-					seat: true,
-					data: true,
-				},
-			},
-			where: {
-				code: params.roomCode,
-				game_slug: params.gameSlug,
-			},
-		});
+type ShowRoomParams = {
+  gameSlug: WhichGame;
+  roomCode: string;
+  players?: String.UUID[];
+};
 
-		if (!room) {
-			return null;
-		}
+export async function showRoom(client: DbClient, params: ShowRoomParams) {
+  const room = await client.rooms.findOne({
+    select: {
+      code: true,
+      game: true,
+      status: true,
+      created_at: true,
+      rules: true,
+      turn: true,
+      players: {
+        id: true,
+        name: true,
+        seat: true,
+        data: true,
+        is_owner: true,
+        user_id: true,
+      },
+    },
+    where: {
+      code: params.roomCode,
+      game: params.gameSlug,
+    },
+  });
 
-		return room;
-	}
+  if (!room) {
+    return null;
+  }
 
-	type JoinRoomParams = {
-		code: string;
-	};
+  return room;
+}
 
-	export async function joinRoom(client: DbClient, { code }: JoinRoomParams) {
-		await client.rooms.updateOne({
-			data: {
-				status: GameStatus.Lobby,
-			},
-			where: { code },
-		});
-	}
+type JoinRoomParams = {
+  code: string;
+};
+
+export async function joinRoom(client: DbClient, { code }: JoinRoomParams) {
+  await client.rooms.updateOne({
+    data: {
+      status: GameStatus.Lobby,
+    },
+    where: { code },
+  });
+}
+
+type UpdateRoomParams = {
+  roomCode: string;
+  status?: GameStatus;
+  winner?: String.UUID;
+  turn?: number;
+};
+
+export async function updateRoom(client: DbClient, params: UpdateRoomParams) {
+  return await client.rooms.updateOne({
+    data: {
+      ...params,
+      updated_at: getCurrentIsoDateTime(),
+    },
+    where: {
+      code: params.roomCode,
+    },
+  });
 }
